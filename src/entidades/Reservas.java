@@ -7,8 +7,8 @@ import java.util.concurrent.TimeUnit;
 public class Reservas {
 	
 	private Integer numQuarto;
-	private Date checkin;
-	private Date checkout;
+	private Date checkIn;
+	private Date checkOut;
 	
 	public Reservas() {
 		
@@ -16,8 +16,8 @@ public class Reservas {
 
 	public Reservas(Integer numQuarto, Date checkin, Date checkout) {
 		this.numQuarto = numQuarto;
-		this.checkin = checkin;
-		this.checkout = checkout;
+		this.checkIn = checkin;
+		this.checkOut = checkout;
 	}
 	
 	private static SimpleDateFormat formatacaoData = new SimpleDateFormat("dd/MM/yyyy");
@@ -31,30 +31,43 @@ public class Reservas {
 	}
 
 	public Date getCheckin() {
-		return checkin;
+		return checkIn;
 	}
 
 	public Date getCheckout() {
-		return checkout;
+		return checkOut;
 	}
 
 	public long duracao() {	
 		//TRANSFORMANDO A DATA EM MILSSEGUNDOS PARA CALCULAR A DISTACIA DE UMA DATA A OUTRA (USAR LONG)
-		long calculoDuracao = checkout.getTime() - checkin.getTime();
+		long calculoDuracao = checkOut.getTime() - checkIn.getTime();
 		
 		return TimeUnit.DAYS.convert(calculoDuracao, TimeUnit.MILLISECONDS);	
 	}
 	
-	public void atualizacaoDatas(Date checkin, Date checkout) {
-		this.checkin = checkin;
-		this.checkout = checkout;
+	public String atualizacaoDatas(Date checkIn, Date checkOut) {
+		
+		Date dataAtual = new Date();
+		
+		// ESTE METODO QUE CONFERE SE A DATA SAIDA E A DATA ENTRADA É ANTERIOR A DATA ATUAL
+		if(checkIn.before(dataAtual) || checkOut.before(dataAtual)) {
+			return "Erro na Reserva: As Datas da Reserva para Atualização Deve ser Datas Futuras";
+		}
+		
+		if(!checkOut.after(checkIn)) { 
+			return "Erro na Reserva: A Data de Check-Out Deve Ser Após a Data de Check-In";
+		}
+		this.checkIn = checkIn;
+		this.checkOut = checkOut;
+		
+		return null;
 	}
 
 	@Override
 	public String toString() {
 		return "Reserva: \nNumero do Quarto: " + numQuarto +
-				"\nData de Entrada: " + formatacaoData.format(checkin) + 
-				"\nData de Saida: " + formatacaoData.format(checkout)+
+				"\nData de Entrada: " + formatacaoData.format(checkIn) + 
+				"\nData de Saida: " + formatacaoData.format(checkOut)+
 				"\nDuração: " + duracao() + " Noites";
 	}
 	

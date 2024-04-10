@@ -30,7 +30,7 @@ public class Programa {
 			Reservas reserva = new Reservas(numQuarto, checkIn, checkOut);
 			System.out.println("\n" + reserva + "\n");
 			
-			System.out.println("Dados Atualizados: da Reserva: ");
+			System.out.println("Dados Atualizados da Reserva: ");
 			
 			System.out.print("Data de Entrda: ");
 			checkIn = formatacaoData.parse(sc.next());
@@ -38,18 +38,11 @@ public class Programa {
 			System.out.print("Data de Saida: ");
 			checkOut = formatacaoData.parse(sc.next());
 			
-			Date dataAtual = new Date();
+			String erro = reserva.atualizacaoDatas(checkIn, checkOut);
 			
-			// ESTE METODO QUE CONFERE SE A DATA SAIDA E A DATA ENTRADA É ANTERIOR A DATA ATUAL
-			if(checkIn.before(dataAtual) || checkOut.before(dataAtual)) {
-				System.out.println("Erro na Reserva: As Datas da Reserva para Atualização Deve ser Datas Futuras");
-				
-			}else if(!checkOut.after(checkIn)) { 
-				System.out.println("Erro na Reserva: A Data de Check-Out Deve Ser Após a Data de Check-In");
-				
+			if(erro != null) {
+				System.out.println("Erro na Reserva: " + erro);
 			}else {
-				reserva.atualizacaoDatas(checkIn, checkOut);
-				
 				System.out.println("\n" + reserva + "\n");	
 			}
 			
