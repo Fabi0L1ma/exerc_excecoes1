@@ -6,28 +6,27 @@ import java.util.Date;
 import java.util.Scanner;
 
 import entidades.Reservas;
+import excecoes.DominioExcecoes;
 
 public class Programa {
 
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args)  {
 		
 		Scanner sc = new Scanner(System.in);
 		SimpleDateFormat formatacaoData = new SimpleDateFormat("dd/MM/yyyy");
 		
-		System.out.print("Número do Quarto: ");
-		int numQuarto = sc.nextInt();
-		
-		System.out.print("Data Entrada: ");
-		Date checkIn = formatacaoData.parse(sc.next());
-		
-		System.out.print("Data Saida: ");
-		Date checkOut = formatacaoData.parse(sc.next());
-		
-		if(!checkOut.after(checkIn)) { // O TIPO DATA TEM ESTE METODO QUE CONFERE SE UMA DATA SAIDA É DEPOIS QUE A DATA ENTRADA
-			System.out.println("Erro na Reserva: A Data de Check-Out Deve Ser Após a Data de Check-In");
+		try {
+			System.out.print("Número do Quarto: ");
+			int numQuarto = sc.nextInt();
 			
-		}else {
+			System.out.print("Data Entrada: ");
+			Date checkIn = formatacaoData.parse(sc.next());
+			
+			System.out.print("Data Saida: ");
+			Date checkOut = formatacaoData.parse(sc.next());
+			
 			Reservas reserva = new Reservas(numQuarto, checkIn, checkOut);
+			
 			System.out.println("\n" + reserva + "\n");
 			
 			System.out.println("Dados Atualizados da Reserva: ");
@@ -38,14 +37,18 @@ public class Programa {
 			System.out.print("Data de Saida: ");
 			checkOut = formatacaoData.parse(sc.next());
 			
-			String erro = reserva.atualizacaoDatas(checkIn, checkOut);
+			reserva.atualizacaoDatas(checkIn, checkOut);
 			
-			if(erro != null) {
-				System.out.println("Erro na Reserva: " + erro);
-			}else {
-				System.out.println("\n" + reserva + "\n");	
-			}
+			System.out.println("\n" + reserva + "\n");	
+				
+		}catch(ParseException e) {
+			System.out.println("Formato de Data Invalida!");
 			
+		}catch(DominioExcecoes e) {
+			System.out.println("Erro em Reserva: " + e.getMessage());
+			
+		}catch(RuntimeException e) {
+			System.out.println("Erro Inesperado!");
 		}
 		
 		sc.close();
